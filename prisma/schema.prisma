@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+  CFO
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  expenses   Expense[]
+  approvals  Approval[]
+
+  @@map("users")
+}
+
+model Expense {
+  id              String        @id @default(cuid())
+  title           String
+  description     String?
+  amount          Float
+  currency        String
+  convertedAmount Float?
+  convertedTo     String?       @default("USD")
+  status          ExpenseStatus @default(PENDING)
+  receiptUrl      String?
+  submittedAt     DateTime      @default(now())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approvals  Approval[]
+
+  @@map("expenses")
+}
+
+model Approval {
+  id        String         @id @default(cuid())
+  level     Int            // 1 = Manager, 2 = CFO
+  status    ApprovalStatus @default(PENDING)
+  comment   String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  // Relations
+  expenseId  String
+  expense    Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  approverId String
+  approver   User    @relation(fields: [approverId], references: [id], onDelete: Cascade)
+
+  @@map("approvals")
+}
