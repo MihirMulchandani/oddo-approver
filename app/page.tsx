@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, DollarSign, Users, CheckCircle, Zap, Shield, BarChart3 } from 'lucide-react'
 
