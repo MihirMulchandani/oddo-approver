@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { CheckCircle, XCircle, Clock, Users, DollarSign, FileText } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, DollarSign, FileText } from 'lucide-react'
 import { Layout } from '../components/Layout'
 import { ExpenseCard } from '../components/ExpenseCard'
 import { ToastContainer, useToast } from '../components/Toast'
@@ -40,7 +40,8 @@ interface Expense {
 }
 
 export default function ManagerPage() {
-  const [user, setUser] = useState<any>(null)
+  interface User { id: string; name: string; email?: string; role: string }
+  const [user, setUser] = useState<User | null>(null)
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending')
@@ -55,6 +56,7 @@ export default function ManagerPage() {
     }
     setUser(storedUser)
     fetchExpenses()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
   const fetchExpenses = async () => {
@@ -81,7 +83,7 @@ export default function ManagerPage() {
         body: JSON.stringify({
           status,
           comment,
-          approverId: user.id
+          approverId: user?.id
         })
       })
 
@@ -200,15 +202,15 @@ export default function ManagerPage() {
         {/* Filter Tabs */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-1 shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="flex space-x-1">
-            {[
+            {([
               { key: 'pending', label: 'Pending Review', count: stats.pending },
               { key: 'approved', label: 'Approved', count: stats.approved },
               { key: 'rejected', label: 'Rejected', count: stats.rejected },
               { key: 'all', label: 'All Expenses', count: expenses.length }
-            ].map((tab) => (
+            ] as { key: 'all' | 'pending' | 'approved' | 'rejected'; label: string; count: number }[]).map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setFilter(tab.key as any)}
+                onClick={() => setFilter(tab.key)}
                 className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === tab.key
                     ? 'bg-blue-600 text-white'
@@ -253,10 +255,10 @@ export default function ManagerPage() {
               {filteredExpenses.map((expense) => (
                 <ExpenseCard
                   key={expense.id}
-                  expense={expense as any}
+                  expense={expense}
                   onApprove={handleApproval}
-                  currentUserId={user.id}
-                  userRole={user.role}
+                  currentUserId={user!.id}
+                  userRole={user!.role}
                 />
               ))}
             </div>

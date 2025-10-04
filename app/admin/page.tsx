@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { CheckCircle, XCircle, Clock, DollarSign, FileText, Users, TrendingUp, BarChart3, Settings } from 'lucide-react'
-import { Layout } from '@/components/Layout'
-import { ExpenseCard } from '@/components/ExpenseCard'
-import { ToastContainer, useToast } from '@/components/Toast'
-import { getStoredUser } from '@/lib/auth'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { CheckCircle, XCircle, Clock, FileText, Users, BarChart3 } from 'lucide-react'
+import { Layout } from '../components/Layout'
+import { ExpenseCard } from '../components/ExpenseCard'
+import { ToastContainer, useToast } from '../components/Toast'
+import { getStoredUser } from '../../lib/auth'
+import { formatCurrency } from '../../lib/utils'
 
 interface Expense {
   id: string
@@ -47,7 +47,7 @@ interface User {
 }
 
 export default function AdminPage() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -97,10 +97,10 @@ export default function AdminPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          status,
-          comment,
-          approverId: user.id
-        })
+            status,
+            comment,
+            approverId: user?.id
+          })
       })
 
       if (response.ok) {
@@ -212,14 +212,14 @@ export default function AdminPage() {
         {/* View Tabs */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-1 shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="flex space-x-1">
-            {[
+            {([
               { key: 'expenses', label: 'Expenses', icon: <FileText className="h-4 w-4" /> },
               { key: 'users', label: 'Users', icon: <Users className="h-4 w-4" /> },
               { key: 'analytics', label: 'Analytics', icon: <BarChart3 className="h-4 w-4" /> }
-            ].map((tab) => (
+            ] as { key: 'expenses' | 'users' | 'analytics'; label: string; icon: JSX.Element }[]).map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setView(tab.key as any)}
+                onClick={() => setView(tab.key)}
                 className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center justify-center space-x-2 ${
                   view === tab.key
                     ? 'bg-blue-600 text-white'
@@ -307,15 +307,15 @@ export default function AdminPage() {
             {/* Filter Tabs */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-1 shadow-sm border border-gray-200 dark:border-gray-700">
               <div className="flex space-x-1">
-                {[
+                {([
                   { key: 'all', label: 'All Expenses', count: expenses.length },
                   { key: 'pending', label: 'Pending', count: stats.pending },
                   { key: 'approved', label: 'Approved', count: stats.approved },
                   { key: 'rejected', label: 'Rejected', count: stats.rejected }
-                ].map((tab) => (
+                ] as { key: 'all' | 'pending' | 'approved' | 'rejected'; label: string; count: number }[]).map((tab) => (
                   <button
                     key={tab.key}
-                    onClick={() => setFilter(tab.key as any)}
+                    onClick={() => setFilter(tab.key)}
                     className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       filter === tab.key
                         ? 'bg-blue-600 text-white'
@@ -358,8 +358,8 @@ export default function AdminPage() {
                       key={expense.id}
                       expense={expense}
                       onApprove={handleApproval}
-                      currentUserId={user.id}
-                      userRole={user.role}
+                      currentUserId={user!.id}
+                      userRole={user!.role}
                     />
                   ))}
                 </div>

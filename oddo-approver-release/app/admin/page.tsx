@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CheckCircle, XCircle, Clock, DollarSign, FileText, Users, TrendingUp, BarChart3, Settings } from 'lucide-react'
-import { Layout } from '@/components/Layout'
-import { ExpenseCard } from '@/components/ExpenseCard'
-import { ToastContainer, useToast } from '@/components/Toast'
-import { getStoredUser } from '@/lib/auth'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { Layout } from '../components/Layout'
+import { ExpenseCard } from '../components/ExpenseCard'
+import { ToastContainer, useToast } from '../components/Toast'
+import { getStoredUser } from '../../lib/auth'
+import { formatCurrency, formatDate } from '../../lib/utils'
 
 interface Expense {
   id: string
@@ -20,6 +20,9 @@ interface Expense {
   status: string
   receiptUrl: string | null
   submittedAt: string
+  createdAt?: string
+  updatedAt?: string
+  userId?: string
   user: {
     id: string
     name: string
@@ -47,7 +50,7 @@ interface User {
 }
 
 export default function AdminPage() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -90,6 +93,10 @@ export default function AdminPage() {
   }
 
   const handleApproval = async (approvalId: string, status: 'APPROVED' | 'REJECTED', comment?: string) => {
+    if (!user) {
+      error('Not authorized', 'You must be logged in to perform this action')
+      return
+    }
     try {
       const response = await fetch(`/api/approvals/${approvalId}`, {
         method: 'PATCH',

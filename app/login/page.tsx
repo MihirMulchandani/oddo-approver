@@ -1,7 +1,8 @@
-'use client'
+"use client"
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { ArrowLeft, User, Shield, DollarSign, Users } from 'lucide-react'
 
 
@@ -101,13 +102,13 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
-          </a>
+          </Link>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
             Welcome to Oddo Approver
           </h2>

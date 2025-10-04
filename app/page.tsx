@@ -1,13 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import Link from 'next/link'
 import { ArrowRight, DollarSign, Users, CheckCircle, Zap, Shield, BarChart3 } from 'lucide-react'
 
 
 export default function HomePage() {
-  const [user, setUser] = useState(null)
-  const router = useRouter()
+  // placeholder user state removed (not used on public home)
 
 
 
@@ -56,12 +55,12 @@ export default function HomePage() {
                 Oddo Approver
               </h1>
             </div>
-            <a
+            <Link
               href="/login"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </header>
@@ -78,13 +77,13 @@ export default function HomePage() {
             and real-time tracking. Built for modern teams.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/login"
               className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors inline-flex items-center justify-center"
             >
               Start Managing Expenses
               <ArrowRight className="ml-2 h-5 w-5" />
-            </a>
+            </Link>
             <a
               href="#features"
               className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-8 py-4 rounded-lg text-lg font-semibold border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -136,13 +135,13 @@ export default function HomePage() {
             <p className="text-xl text-blue-100 mb-8">
               Join teams already using Oddo Approver to manage their expenses efficiently
             </p>
-            <a
+            <Link
               href="/login"
               className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center justify-center"
             >
               Get Started Now
               <ArrowRight className="ml-2 h-5 w-5" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

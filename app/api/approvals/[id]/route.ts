@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../lib/prisma'
 import { Role } from '@prisma/client'
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest) {
+  const url = new URL(request.url)
+  const segments = url.pathname.split('/').filter(Boolean)
+  const id = segments[segments.length - 1]
   try {
     const body = await request.json()
     const { status, comment, approverId } = body
@@ -26,7 +26,7 @@ export async function PATCH(
 
     // Get the approval
     const approval = await prisma.approval.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         expense: true,
         approver: true,
@@ -54,8 +54,8 @@ export async function PATCH(
     }
 
     // Update approval
-    const updatedApproval = await prisma.approval.update({
-      where: { id: params.id },
+    await prisma.approval.update({
+      where: { id },
       data: {
         status,
         comment,
@@ -109,8 +109,8 @@ export async function PATCH(
     }
 
     // Return updated approval with relations
-    const result = await prisma.approval.findUnique({
-      where: { id: params.id },
+      const result = await prisma.approval.findUnique({
+      where: { id },
       include: {
         expense: {
           include: {

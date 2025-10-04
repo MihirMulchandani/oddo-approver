@@ -3,11 +3,37 @@
 import { useState } from 'react'
 import { Calendar, DollarSign, User, FileText, Eye, CheckCircle, XCircle, Clock } from 'lucide-react'
 import { formatCurrency, formatDate, getStatusColor, getRoleColor } from '../../lib/utils'
-import { Expense, Approval, User as UserType } from '@prisma/client'
 
-interface ExpenseWithRelations extends Expense {
+// Lightweight local types to avoid depending on server-only prisma types in client code
+interface UserType {
+  id: string
+  name: string
+  email?: string
+  role: string
+}
+
+interface Approval {
+  id: string
+  level: number
+  status: string
+  comment?: string | null
+  approver: UserType
+  approverId?: string
+}
+
+interface ExpenseWithRelations {
+  id: string
+  title: string
+  description?: string | null
+  amount: number
+  currency: string
+  convertedAmount?: number | null
+  convertedTo?: string | null
+  status: string
+  receiptUrl?: string | null
+  submittedAt: string
   user: UserType
-  approvals: (Approval & { approver: UserType })[]
+  approvals: Approval[]
 }
 
 interface ExpenseCardProps {
@@ -132,7 +158,7 @@ export function ExpenseCard({
           </h4>
           
           <div className="space-y-3">
-            {expense.approvals.map((approval, index) => (
+            {expense.approvals.map((approval) => (
               <div key={approval.id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="flex items-center space-x-2">
@@ -153,7 +179,7 @@ export function ExpenseCard({
                 
                 {approval.comment && (
                   <span className="text-xs text-gray-500 dark:text-gray-400 italic">
-                    "{approval.comment}"
+                    {approval.comment}
                   </span>
                 )}
               </div>

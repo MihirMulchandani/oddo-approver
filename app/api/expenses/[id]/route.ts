@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../lib/prisma'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url)
+  const segments = url.pathname.split('/').filter(Boolean)
+  const id = segments[segments.length - 1]
   try {
     const expense = await prisma.expense.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user: {
           select: {

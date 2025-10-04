@@ -3,10 +3,17 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowRight, DollarSign, Users, CheckCircle, Zap, Shield, BarChart3 } from 'lucide-react'
-import { getStoredUser } from '@/lib/auth'
+import { getStoredUser } from '../../lib/auth'
+
+interface User {
+  id: string
+  name?: string
+  email?: string
+  role?: string
+}
 
 export default function HomePage() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
 
   useEffect(() => {

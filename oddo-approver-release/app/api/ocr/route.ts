@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { extractTextFromImage } from '@/lib/ocr'
+import { extractTextFromImage } from '../../lib/ocr'
 
 export async function POST(request: NextRequest) {
   try {

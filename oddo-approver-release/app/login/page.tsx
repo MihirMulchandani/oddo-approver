@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, User, Shield, DollarSign, Users } from 'lucide-react'
-import { storeUser, getStoredUser } from '@/lib/auth'
+import { storeUser, getStoredUser } from '../../lib/auth'
 
 const DEMO_USERS = [
   {

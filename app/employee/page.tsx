@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, Upload, FileText, DollarSign, Calendar, MapPin } from 'lucide-react'
-import { Layout } from '@/components/Layout'
-import { ExpenseCard } from '@/components/ExpenseCard'
-import { ToastContainer, useToast } from '@/components/Toast'
+import { Layout } from '../components/Layout'
+import { ExpenseCard } from '../components/ExpenseCard'
+import { ToastContainer, useToast } from '../components/Toast'
 import { getStoredUser } from '../../lib/auth'
 import { formatCurrency } from '../../lib/utils'
 
@@ -40,12 +40,13 @@ interface Expense {
 }
 
 export default function EmployeePage() {
-  const [user, setUser] = useState<any>(null)
+  interface User { id: string; name: string; email?: string; role: string }
+  const [user, setUser] = useState<User | null>(null)
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [ocrResult, setOcrResult] = useState<any>(null)
+  const [ocrResult, setOcrResult] = useState<{ amount?: number; currency?: string } | null>(null)
   const [isProcessingOcr, setIsProcessingOcr] = useState(false)
   const router = useRouter()
   const { toasts, success, error, removeToast } = useToast()
@@ -67,6 +68,7 @@ export default function EmployeePage() {
     }
     setUser(storedUser)
     fetchExpenses()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
   const fetchExpenses = async () => {
@@ -135,7 +137,7 @@ export default function EmployeePage() {
           amount: parseFloat(formData.amount),
           currency: formData.currency,
           receiptUrl: null, // In a real app, you'd upload to a file service
-          userId: user.id
+          userId: user?.id
         })
       })
 
@@ -410,7 +412,7 @@ export default function EmployeePage() {
               {expenses.map((expense) => (
                 <ExpenseCard
                   key={expense.id}
-                  expense={expense as any}
+                  expense={expense}
                 />
               ))}
             </div>

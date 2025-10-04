@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { convertCurrency } from '@/lib/currency'
+import { prisma } from '../../lib/prisma'
+import { convertCurrency } from '../../lib/currency'
 import { Role } from '@prisma/client'
 
 export async function GET(request: NextRequest) {

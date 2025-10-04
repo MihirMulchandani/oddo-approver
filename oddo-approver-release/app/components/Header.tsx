@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { User, LogOut, Menu, X } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
-import { getStoredUser, clearUser, User as UserType } from '@/lib/auth'
+import { getStoredUser, clearUser, User as UserType } from '../../lib/auth'
 
 export function Header() {
   const [user, setUser] = useState<UserType | null>(null)

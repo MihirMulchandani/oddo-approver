@@ -5,10 +5,9 @@ import { Approval, User as UserType } from '@prisma/client'
 
 interface StepperProps {
   approvals: (Approval & { approver: UserType })[]
-  currentLevel?: number
 }
 
-export function Stepper({ approvals, currentLevel }: StepperProps) {
+export function Stepper({ approvals }: StepperProps) {
   const maxLevel = Math.max(...approvals.map(a => a.level))
   const levels = Array.from({ length: maxLevel }, (_, i) => i + 1)
 

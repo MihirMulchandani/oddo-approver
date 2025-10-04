@@ -1,18 +1,46 @@
-'use client'
+"use client"
 
 import { useState } from 'react'
 import { Calendar, DollarSign, User, FileText, Eye, CheckCircle, XCircle, Clock } from 'lucide-react'
-import { formatCurrency, formatDate, getStatusColor, getRoleColor } from '@/lib/utils'
-import { Expense, Approval, User as UserType } from '@prisma/client'
+import { formatCurrency, formatDate, getStatusColor, getRoleColor } from '../../lib/utils'
 
-interface ExpenseWithRelations extends Expense {
-  user: UserType
-  approvals: (Approval & { approver: UserType })[]
+// Use local, permissive types so components work with plain JSON responses (dates may be strings)
+interface UserLike {
+  id: string
+  name: string
+  email?: string
+  role: string
+  createdAt?: string | Date
+  updatedAt?: string | Date
+}
+
+interface ApprovalLike {
+  id: string
+  level: number
+  status: string
+  comment?: string | null
+  approver: UserLike
+  approverId?: string
+}
+
+interface ExpenseWithRelationsLike {
+  id: string
+  title: string
+  description?: string | null
+  amount: number
+  currency: string
+  convertedAmount?: number | null
+  convertedTo?: string | null
+  status: string
+  receiptUrl?: string | null
+  submittedAt: string
+  user: UserLike
+  approvals: ApprovalLike[]
 }
 
 interface ExpenseCardProps {
-  expense: ExpenseWithRelations
-  onView?: (expense: ExpenseWithRelations) => void
+  expense: ExpenseWithRelationsLike
+  onView?: (expense: ExpenseWithRelationsLike) => void
   onApprove?: (approvalId: string, status: 'APPROVED' | 'REJECTED', comment?: string) => void
   currentUserId?: string
   userRole?: string
@@ -29,7 +57,7 @@ export function ExpenseCard({
   const [approvalComment, setApprovalComment] = useState('')
   const [isApproving, setIsApproving] = useState(false)
 
-  const canApprove = (approval: Approval & { approver: UserType }) => {
+  const canApprove = (approval: ApprovalLike) => {
     if (!currentUserId || !userRole) return false
     if (approval.status !== 'PENDING') return false
     if (approval.approverId === currentUserId) return true
