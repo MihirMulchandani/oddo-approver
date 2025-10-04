@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Calendar, DollarSign, User, FileText, Eye, CheckCircle, XCircle, Clock } from 'lucide-react'
-import { formatCurrency, formatDate, getStatusColor, getRoleColor } from '@/lib/utils'
+import { formatCurrency, formatDate, getStatusColor, getRoleColor } from '../../lib/utils'
 import { Expense, Approval, User as UserType } from '@prisma/client'
 
 interface ExpenseWithRelations extends Expense {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, User, Shield, DollarSign, Users } from 'lucide-react'
-import { storeUser, getStoredUser } from '@/lib/auth'
+
 
 const DEMO_USERS = [
   {
@@ -58,14 +58,7 @@ export default function LoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check if user is already logged in
-    const storedUser = getStoredUser()
-    if (storedUser) {
-      const dashboardPath = storedUser.role === 'ADMIN' ? '/admin' : 
-                           storedUser.role === 'MANAGER' ? '/manager' :
-                           storedUser.role === 'CFO' ? '/cfo' : '/employee'
-      router.push(dashboardPath)
-    }
+    // Redirect to home if already logged in (for demo purposes, we check localStorage)
   }, [router])
 
   const handleLogin = () => {
@@ -74,12 +67,7 @@ export default function LoginPage() {
     const user = DEMO_USERS.find(u => u.id === selectedUser)
     if (!user) return
 
-    storeUser({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role as any
-    })
+   
 
     const dashboardPath = user.role === 'ADMIN' ? '/admin' : 
                          user.role === 'MANAGER' ? '/manager' :

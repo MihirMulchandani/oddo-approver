@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CheckCircle, XCircle, Clock, Users, DollarSign, FileText } from 'lucide-react'
-import { Layout } from '@/components/Layout'
-import { ExpenseCard } from '@/components/ExpenseCard'
-import { ToastContainer, useToast } from '@/components/Toast'
-import { getStoredUser } from '@/lib/auth'
-import { formatCurrency } from '@/lib/utils'
+import { Layout } from '../components/Layout'
+import { ExpenseCard } from '../components/ExpenseCard'
+import { ToastContainer, useToast } from '../components/Toast'
+import { getStoredUser } from '../../lib/auth'
+import { formatCurrency } from '../../lib/utils'
 
 interface Expense {
   id: string
@@ -253,7 +253,7 @@ export default function ManagerPage() {
               {filteredExpenses.map((expense) => (
                 <ExpenseCard
                   key={expense.id}
-                  expense={expense}
+                  expense={expense as any}
                   onApprove={handleApproval}
                   currentUserId={user.id}
                   userRole={user.role}

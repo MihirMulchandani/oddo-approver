@@ -25,6 +25,11 @@ export function formatDateTime(date: Date | string): string {
   })
 }
 
+export function formatCurrency(amount: number, currency: string) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount)
+}
+
+
 export function getInitials(name: string): string {
   return name
     .split(' ')

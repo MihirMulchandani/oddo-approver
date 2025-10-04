@@ -6,8 +6,8 @@ import { Plus, Upload, FileText, DollarSign, Calendar, MapPin } from 'lucide-rea
 import { Layout } from '@/components/Layout'
 import { ExpenseCard } from '@/components/ExpenseCard'
 import { ToastContainer, useToast } from '@/components/Toast'
-import { getStoredUser } from '@/lib/auth'
-import { formatCurrency } from '@/lib/utils'
+import { getStoredUser } from '../../lib/auth'
+import { formatCurrency } from '../../lib/utils'
 
 interface Expense {
   id: string
@@ -410,7 +410,7 @@ export default function EmployeePage() {
               {expenses.map((expense) => (
                 <ExpenseCard
                   key={expense.id}
-                  expense={expense}
+                  expense={expense as any}
                 />
               ))}
             </div>

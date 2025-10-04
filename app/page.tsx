@@ -3,16 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowRight, DollarSign, Users, CheckCircle, Zap, Shield, BarChart3 } from 'lucide-react'
-import { getStoredUser } from '@/lib/auth'
+
 
 export default function HomePage() {
   const [user, setUser] = useState(null)
   const router = useRouter()
 
-  useEffect(() => {
-    const storedUser = getStoredUser()
-    setUser(storedUser)
-  }, [])
+
 
   const features = [
     {
@@ -47,14 +44,6 @@ export default function HomePage() {
     }
   ]
 
-  if (user) {
-    // Redirect to appropriate dashboard based on role
-    const dashboardPath = user.role === 'ADMIN' ? '/admin' : 
-                         user.role === 'MANAGER' ? '/manager' :
-                         user.role === 'CFO' ? '/cfo' : '/employee'
-    router.push(dashboardPath)
-    return null
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
